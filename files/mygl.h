@@ -3,6 +3,8 @@
 
 #include "definitions.h"
 #include <math.h>
+#include <iostream>
+#include <stdlib.h>
 
 //*****************************************************************************
 // Defina aqui as suas funções gráficas
@@ -173,20 +175,54 @@ void DrawLine(Pixel pInicial, Pixel pFinal)
     }
 }
 
-
-
-void setScale_M(int tx, int ty, int tz)
+void M_init()
 {
-	glm::vec4 v0 = glm::vec4();
-	glm::vec4 v0 = glm::vec4();
-	glm::vec4 v0 = glm::vec4();
-	glm::vec4 v0 = glm::vec4();
+	scale = translation = rotation = Identity;
 }
-void setTranslation_M(){}
-void setRotation_M(){}
+
+void setScale_M(int sx, int sy, int sz)
+{
+	scale[0][0]=sx;
+	scale[1][1]=sy;
+	scale[2][2]=sz;
+}
+void setTranslation_M(int tx, int ty, int tz)
+{
+	translation[3][0]=tx;
+	translation[3][1]=ty;
+	translation[3][2]=tz;
+}
+void setRotation_M(const char axis, const float theta)
+{
+	rotation = Identity;	
+	switch(axis){
+		case x:
+			rotation[1][1]=cos(theta);
+			rotation[1][2]=sen(theta);
+			rotation[2][1]=-sen(theta);
+			rotation[2][2]=cos(theta);
+			break;
+		case y:
+			rotation[0][0]=cos(theta);
+			rotation[0][2]=-sen(theta);
+			rotation[2][0]=sen(theta);
+			rotation[2][2]=cos(theta);
+			break;
+		case z:
+			rotation[0][0]=cos(theta);
+			rotation[0][1]=sen(theta);
+			rotation[1][0]=-sen(theta);
+			rotation[1][1]=cos(theta);
+			break;
+		default:
+			std::cout << "Invalid axis value. Try again.\n";
+			exit(-1);
+	}
+}
 
 void DrawPipeline(glm::vec3 const &p)
 {
+	M_init();	
 	glm::vec4 pix = glm::vec4(p.x,p.y,p.z,1);
 	pix = ModelViewProjection*pix;
 	pix = pix / pix[4];
