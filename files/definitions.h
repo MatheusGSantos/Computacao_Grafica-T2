@@ -15,6 +15,9 @@ glm::mat4 translation;
 //rotation matrix
 glm::mat4 rotation;
 
+//viewport matrix
+glm::mat4 viewport;
+
 
 #endif // _DEFINITIONS_H_
 

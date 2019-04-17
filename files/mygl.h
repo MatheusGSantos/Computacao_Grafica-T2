@@ -175,10 +175,12 @@ void DrawLine(Pixel pInicial, Pixel pFinal)
     }
 }
 
+
 void M_init()
 {
 	scale = translation = rotation = Identity;
 }
+
 
 void setScale_M(int sx, int sy, int sz)
 {
@@ -186,12 +188,16 @@ void setScale_M(int sx, int sy, int sz)
 	scale[1][1]=sy;
 	scale[2][2]=sz;
 }
+
+
 void setTranslation_M(int tx, int ty, int tz)
 {
 	translation[3][0]=tx;
 	translation[3][1]=ty;
 	translation[3][2]=tz;
 }
+
+
 void setRotation_M(const char axis, const float theta)
 {
 	rotation = Identity;	
@@ -220,17 +226,25 @@ void setRotation_M(const char axis, const float theta)
 	}
 }
 
+
+void buildViewPort(int w, int h)
+{
+	setScale_M(w/2,h/2,1);
+	viewport = scale;
+	setScale_M(1,-1,1);
+	setTranslation_M(1,1,0);
+	viewport *= translate*scale;
+}
+
+
 void DrawPipeline(glm::vec3 const &p)
 {
 	M_init();	
 	glm::vec4 pix = glm::vec4(p.x,p.y,p.z,1);
 	pix = ModelViewProjection*pix;
 	pix = pix / pix[4];
-
-
-
+	pix = viewport*pix;
 }
-
 
 
 class Triangulo
