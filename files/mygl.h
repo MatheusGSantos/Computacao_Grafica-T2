@@ -5,24 +5,12 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
-#include <glm/gtc/matrix_access.hpp>            //TIRAR DEPOIS
 
 
 //*****************************************************************************
 // Defina aqui as suas funções gráficas
 //*****************************************************************************
 
-
-void PrintMatrix(glm::mat4 &matrix)         //TIRAR DEPOIS
-{
-	for(int i = 0; i<4; i++)
-	{	
-		for(int j = 0; j<4; j++){
-			printf("c[%d][%d] %.2lf\t",j,i,glm::column(matrix,j)[i]);
-		}
-		printf("\n");
-	}
-}
 
 class Pixel
 {
@@ -198,20 +186,12 @@ void DrawLine(Pixel pInicial, Pixel pFinal)
 }
 
 
-class Triangulo
+void DrawTriangle(Pixel vertice1, Pixel vertice2, Pixel vertice3)
 {
-public:
-    Pixel vertice1,vertice2,vertice3;
-    Triangulo(Pixel v1,Pixel v2,Pixel v3):vertice1(v1), vertice2(v2), vertice3(v3)
-    {}
-    ~Triangulo(){}
-    void DrawTriangle()
-    {
-        DrawLine(vertice1,vertice2);
-        DrawLine(vertice2,vertice3);
-        DrawLine(vertice3,vertice1);
-    }
-};
+    DrawLine(vertice1,vertice2);
+    DrawLine(vertice2,vertice3);
+    DrawLine(vertice3,vertice1);
+}
 
 
 //set scale, translation and rotation to identity matrix
@@ -240,7 +220,7 @@ void setTranslation_M(int tx, int ty, int tz)
 
 
 //set rotation matrix
-void setRotation_M(const char axis, const double theta)
+void setRotation_M(const char axis, const float theta)
 {
 	rotation = Identity;	
 	switch(axis){
@@ -298,7 +278,7 @@ void buildView_M()
 void buildProjection_M()
 {
     //viewplane distance
-    double d = 1;
+    double d = 1.9;
 
     Projection = glm::mat4( canonic1,
                             canonic2,
@@ -322,44 +302,38 @@ void buildViewPort(const int &w,const int &h)
 }
 
 
-void PipeLine(Pixel &p, int i) //Model >> View >> ModelView >> Projection >> ModelViewProjection >> MVP*pix >> /w >> viewport
+void PipeLine(glm::vec4 &p)
 {
-    glm::vec4 pix = glm::vec4(p.x,p.y,p.z,1);
-    Model = Identity;
+    setRotation_M('x',-0.09);
+    Model = rotation*Identity;
     buildView_M();
     ModelView = View * Model;
     buildProjection_M();
     ModelViewProjection = Projection * ModelView;
-    pix = ModelViewProjection*pix;
-	pix = pix / pix.w;
+    p = ModelViewProjection*p;
+	p = p / p.w;
     buildViewPort(IMAGE_WIDTH, IMAGE_HEIGHT);
-    pix = viewport*pix;
-    p.x = pix.x;
-    p.y = pix.y;
-    p.z = pix.z;
+    p = viewport*p;
 }
 
-void DrawPipeLine(std::vector<Pixel> pixels)
+void DrawPipeLine(std::vector<glm::vec4> pixels, int color[4])
 {
-    for (int i = 0; i < 8; i++)
+	//apply pipeline
+	for (int i = 0; i < pixels.size(); i++)
     {
-        PipeLine(pixels[i], i);
+        PipeLine(pixels[i]);
     }
-    
-    DrawLine(pixels[0],pixels[1]);
-    DrawLine(pixels[0],pixels[2]);
-    DrawLine(pixels[1],pixels[3]);
-    DrawLine(pixels[2],pixels[3]);
-    DrawLine(pixels[4],pixels[5]);
-    DrawLine(pixels[4],pixels[6]);
-    DrawLine(pixels[5],pixels[7]);
-    DrawLine(pixels[6],pixels[7]);
-    DrawLine(pixels[0],pixels[4]);
-    DrawLine(pixels[1],pixels[5]);
-    DrawLine(pixels[2],pixels[6]);
-    DrawLine(pixels[3],pixels[7]);
-    
+
+	//draw triangles
+    for (int i = 0; i < pixels.size(); i += 3)
+	{
+		Pixel pixel1((int) pixels[i].x, (int) pixels[i].y, (int) pixels[i].z, color);
+		Pixel pixel2((int) pixels[i + 1].x, (int) pixels[i + 1].y, (int) pixels[i + 1].z, color);
+		Pixel pixel3((int) pixels[i + 2].x, (int) pixels[i + 2].y, (int) pixels[i + 2].z, color);
+		DrawTriangle(pixel1, pixel2, pixel3);
+	}
 }
+
 
 #endif // _MYGL_H_
 

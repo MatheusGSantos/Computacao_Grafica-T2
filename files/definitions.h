@@ -40,7 +40,7 @@ glm::mat4 View;
 
 
 //Camera
-glm::vec3 camera_pos = glm::vec3(2,3,5);
+glm::vec3 camera_pos = glm::vec3(0,0,4);
 glm::vec3 camera_lookat = glm::vec3(0,0,0);
 glm::vec3 camera_up = glm::vec3(0,1,0);
 
