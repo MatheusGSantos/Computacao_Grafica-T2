@@ -109,11 +109,20 @@ void Sandbox()
 */
 
 
-Pixel vertice1 = Pixel(125,300, red);
-Pixel vertice2 = Pixel(375,300, blue);
-Pixel vertice3 = Pixel(250,83, green);
+Pixel vertice1 = Pixel(-1, -1, -1, green);
+Pixel vertice2 = Pixel(-1, -1, 1, green);
+Pixel vertice3 = Pixel(1, -1, -1, green);
+Pixel vertice4 = Pixel(1, -1, 1, green);
+Pixel vertice5 = Pixel(-1, 1, -1, green);
+Pixel vertice6 = Pixel(-1, 1, 1, green);
+Pixel vertice7 = Pixel(1, 1, -1, green);
+Pixel vertice8 = Pixel(1, 1, 1, green);
 
-Triangulo tr = Triangulo(vertice1,vertice2,vertice3);
+
+//Triangulo tr = Triangulo(vertice1,vertice2,vertice3);
+Pixel pxls[8] = {vertice1, vertice2, vertice3, vertice4, vertice5, vertice6, vertice7, vertice8};
+std::vector<Pixel> pixels;
+
 
 
 //-----------------------------------------------------------------------------
@@ -122,7 +131,11 @@ void MyGlDraw(void)
 	//*************************************************************************
 	// Chame aqui as funções do mygl.h
 	//*************************************************************************
-	tr.DrawTriangle();
+	for(Pixel &p : pxls){
+		pixels.push_back(p);
+	}
+
+	DrawPipeLine(pixels);
 }
 
 //-----------------------------------------------------------------------------
@@ -132,6 +145,7 @@ int main(int argc, char **argv)
 	InitOpenGL(&argc, argv);
 	InitCallBacks();
 	InitDataStructures();
+	M_init();	//teste
 
 	// Ajusta a função que chama as funções do mygl.h
 	DrawFunc = MyGlDraw;
