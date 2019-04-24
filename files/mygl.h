@@ -302,26 +302,32 @@ void buildViewPort(const int &w,const int &h)
 }
 
 
-void PipeLine(glm::vec4 &p)
+void CalcMatrix()
 {
-    setRotation_M('x',-0.09);
+	setRotation_M('x',-0.09);
     Model = rotation*Identity;
     buildView_M();
     ModelView = View * Model;
     buildProjection_M();
     ModelViewProjection = Projection * ModelView;
+	buildViewPort(IMAGE_WIDTH, IMAGE_HEIGHT);
+}
+
+
+void PipeLineTransform(glm::vec4 &p)
+{
     p = ModelViewProjection*p;
 	p = p / p.w;
-    buildViewPort(IMAGE_WIDTH, IMAGE_HEIGHT);
     p = viewport*p;
 }
 
 void DrawPipeLine(std::vector<glm::vec4> pixels, int color[4])
 {
+	CalcMatrix();
 	//apply pipeline
 	for (int i = 0; i < pixels.size(); i++)
     {
-        PipeLine(pixels[i]);
+        PipeLineTransform(pixels[i]);
     }
 
 	//draw triangles
