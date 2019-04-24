@@ -7,4 +7,5 @@ As bibliotecas utilizadas foram do OpenGL, GLUT, Assimp e GLM. A aplicação é 
 
 # Referências
 GLM - https://glm.g-truc.net/0.9.9/index.html
+
 Material e Aulas do Professor Christian
