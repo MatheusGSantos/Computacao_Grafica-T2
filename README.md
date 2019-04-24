@@ -26,6 +26,24 @@ A partir das dimensões da tela, é possível formar a matriz ViewPort. Essa mat
 ## Resultados
 Um modelo 3D open source "monkey_head2.obj" foi utilizado para o teste do programa. Com o objeto renderizado utilizando o pipeline do próprio OpenGL, é possível obter o seguinte resultado:
 
+![](https://raw.githubusercontent.com/MatheusGSantos/Computacao_Grafica-T2/master/images/monkey_head.png)
+
+
+Ao carrregar o modelo, utilizando a biblioteca assimp, num vector(c++) de vetores de 4 dimensões e passando uma cópia para a função que transforma os vértices e desenha os triângulos, obteve-se o seguinte resultado:
+
+![](https://raw.githubusercontent.com/MatheusGSantos/Computacao_Grafica-T2/master/images/monkey_head_P.png)
+
+Alguns parâmetros como posição da câmera, distância do viewplane e rotação do objeto tiveram que ser modificados, tendo seus valores achados através da tentativa e erro, para que a imagem gerada pelo pipeline se aproximasse ao máximo da gerada pelo pipeline do OpenGL.
+
+No fim, comparando as duas imagens:
+
+![](https://raw.githubusercontent.com/MatheusGSantos/Computacao_Grafica-T2/master/images/comparison.png)
+
+Nota-se que o resultado é satisfatório, dado que é uma simplificação do pipeline gráfico utilizado pelo OpenGL.
+
+### Possível Melhoria
+O processo de transformação dos vértices, bem como o desenho dos triângulos, poderia sem feito de forma concorrente para agilizar o processo.
+
 
 
 ## Referências
