@@ -18,7 +18,15 @@ A matriz View é responsável por essa transformação. Essa matriz é obtida at
 A partir da distância d (distância entre a câmera e o viewplane) é possível gerar a matriz projection, que transforma o w dos vértices num valor diferente de 1 e aplica distorção perpectiva (objetos mais distantes se tornam menores que objetos mais próximos). Também calculada dentro de uma função, no fim montando a matriz Projection.
 
 ### Espaço de Recorte -> Espaço Canônico
-Todas as matrizes calculadas até esta etapa são multiplicadas, gerando a matriz ModelViewProjection.
+Todas as matrizes calculadas até esta etapa são multiplicadas, gerando a matriz ModelViewProjection. A multiplicação dos vértices por essa matriz aplica distorção perspectiva no objeto. Para a passagem para o espaço canônico, cada vértice tem suas coordenadas divididas por sua coordenada w, fazendo com que o w de todos os vértices volte a ser 1, mantendo a distorção perspectiva. Essa técnica leva os vértices, na verdade, para um espaço muito próximo ao espaço canônico.
+
+### Espaço Canônico -> Espaço de Tela
+A partir das dimensões da tela, é possível formar a matriz ViewPort. Essa matriz é a combinação de uma inversão em y (escala -1 em y), com uma escala para metade da tela e uma translação para o primeiro quadrante já que não existem coordenadas negativas de tela. Após montada essa matriz dentro de uma função, ela multiplica cada vértice, realizando a etapa final do pipeline e dando coordenadas de tela para cada um.
+
+## Resultados
+Um modelo 3D open source "monkey_head2.obj" foi utilizado para o teste do programa. Com o objeto renderizado utilizando o pipeline do próprio OpenGL, é possível obter o seguinte resultado:
+
+
 
 ## Referências
 GLM - https://glm.g-truc.net/0.9.9/index.html
