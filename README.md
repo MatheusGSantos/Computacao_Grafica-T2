@@ -42,7 +42,7 @@ No fim, comparando as duas imagens:
 Nota-se que o resultado é satisfatório, dado que é uma simplificação do pipeline gráfico utilizado pelo OpenGL.
 
 ### Possível Melhoria
-O processo de transformação dos vértices, bem como o desenho dos triângulos, poderia sem feito de forma concorrente para agilizar o processo.
+O processo de transformação dos vértices, bem como o desenho dos triângulos, poderia sem feito de forma paralela para agilizar o processo.
 
 
 
